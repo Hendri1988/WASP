@@ -2,8 +2,6 @@ from pynput import keyboard
 from PyQt6.QtCore import QObject, pyqtSignal
 
 class HotkeyListener(QObject):
-    """Listens for global hotkey presses"""
-    
     stop_triggered = pyqtSignal()
     
     def __init__(self, hotkey='<f9>'):
