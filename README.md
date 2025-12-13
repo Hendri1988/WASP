@@ -9,7 +9,7 @@
 
 **Outsmarting Corporate Surveillance Since 2025**
 
-*Because your HR doesn't need to know you took a coffee break* ☕
+*Because your Boss/HR/Manager doesn't need to know you took a coffee break* ☕
 
 ![Screenshot](https://github.com/user-attachments/assets/8e650aed-574e-4c25-ac5a-43ba76e764c6)
 
@@ -28,6 +28,7 @@ WASP (Workplace Activity Simulation Program) is your secret weapon against invas
 ### 😤 The Problem
 
 Modern companies install tracking software that monitors:
+
 ⏱️ Your active time
 
 🖱️ Mouse movements
@@ -371,7 +372,7 @@ Got questions? Need help? Want to share your success story?
 
 ## 🎭 Easter Egg
 
-If you're from HR reading this: Hi! 👋 
+If you're Boss/HR/Manager reading this: Hi! 👋 
 
 Maybe instead of monitoring every mouse click, you could try:
 - Trusting your employees
