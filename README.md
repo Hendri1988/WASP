@@ -11,6 +11,8 @@
 
 *Because your HR doesn't need to know you took a coffee break* ☕
 
+![Screenshot](https://github.com/user-attachments/assets/00c6bf03-f26e-499e-93af-5019dfb8c342)
+
 </div>
 
 ---
