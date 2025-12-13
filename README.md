@@ -120,6 +120,18 @@ Works even when:
 - The boss is approaching rapidly
 - You're in full panic mode
 
+### The ESC Stealth Button 👻
+
+Need the window to disappear instantly? **PRESS ESC!**
+
+Perfect for when:
+- You need to hide the evidence
+- Someone looks at your screen
+- You want to run in full stealth mode
+- You just like pressing Escape
+
+**Note**: This hides the window to the tray but keeps WASP running! Use **F9** if you need to stop the movement violently.
+
 ### Scheduler: The "I Work Regular Hours" Feature
 
 1. Enable the scheduler
