@@ -90,6 +90,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-tk imagemagick
+          # Install PyQt6 system dependencies to avoid PyInstaller warnings/errors
+          sudo apt-get install -y libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-shape0 libxcb-xkb1 libxcb-util1 libxkbcommon-x11-0
 
       - name: Build with PyInstaller (Windows)
         if: runner.os == 'Windows'
@@ -138,6 +140,7 @@ jobs:
           echo "Exec=wasp-app" >> AppDir/wasp.desktop
           echo "Icon=wasp" >> AppDir/wasp.desktop
           echo "Type=Application" >> AppDir/wasp.desktop
+          echo "Categories=Utility;" >> AppDir/wasp.desktop
           
           # Icon
           if [ -f icon.ico ]; then convert icon.ico AppDir/wasp.png; else touch AppDir/wasp.png; fi
