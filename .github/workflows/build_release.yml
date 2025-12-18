@@ -89,64 +89,108 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-tk
+          sudo apt-get install -y python3-tk imagemagick
 
       - name: Build with PyInstaller (Windows)
         if: runner.os == 'Windows'
+        env:
+          VERSION_TAG: ${{ needs.create_release.outputs.tag_name }}
         run: |
           pyinstaller --name WASP --onefile --windowed --add-data "core;core" --add-data "gui;gui" main.py
-          mv dist/WASP.exe dist/WASP-windows.exe
+          mv dist/WASP.exe "dist/WASP-${{ env.VERSION_TAG }}-windows.exe"
 
-      - name: Build with PyInstaller (Linux)
+      - name: Build with PyInstaller (Linux - Binary, Deb, AppImage)
         if: runner.os == 'Linux'
+        env:
+          VERSION_TAG: ${{ needs.create_release.outputs.tag_name }}
         run: |
+          # 1. Build Base Binary
           pyinstaller --name WASP --onefile --windowed --add-data "core:core" --add-data "gui:gui" main.py
-          mv dist/WASP dist/WASP-linux
+          # Rename binary
+          cp dist/WASP "dist/WASP-${{ env.VERSION_TAG }}-linux"
+          
+          # Clean version for control file (remove v)
+          CLEAN_VER="${VERSION_TAG#v}"
 
-      - name: Build with PyInstaller (macOS)
+          # 2. Create .deb Package
+          mkdir -p deb_pkg/usr/local/bin
+          mkdir -p deb_pkg/DEBIAN
+          cp dist/WASP deb_pkg/usr/local/bin/wasp-app
+          chmod +x deb_pkg/usr/local/bin/wasp-app
+          
+          # Control File
+          echo "Package: wasp-app" > deb_pkg/DEBIAN/control
+          echo "Version: $CLEAN_VER" >> deb_pkg/DEBIAN/control
+          echo "Architecture: amd64" >> deb_pkg/DEBIAN/control
+          echo "Maintainer: GitHub Action" >> deb_pkg/DEBIAN/control
+          echo "Description: WASP Application" >> deb_pkg/DEBIAN/control
+          
+          dpkg-deb --build deb_pkg "dist/WASP-${{ env.VERSION_TAG }}-linux.deb"
+
+          # 3. Create AppImage
+          # Prepare AppDir
+          mkdir -p AppDir/usr/bin
+          cp dist/WASP AppDir/usr/bin/wasp-app
+          
+          # Desktop File
+          echo "[Desktop Entry]" > AppDir/wasp.desktop
+          echo "Name=WASP" >> AppDir/wasp.desktop
+          echo "Exec=wasp-app" >> AppDir/wasp.desktop
+          echo "Icon=wasp" >> AppDir/wasp.desktop
+          echo "Type=Application" >> AppDir/wasp.desktop
+          
+          # Icon
+          if [ -f icon.ico ]; then convert icon.ico AppDir/wasp.png; else touch AppDir/wasp.png; fi
+          
+          # AppRun
+          echo '#!/bin/sh' > AppDir/AppRun
+          echo 'exec "$APPDIR/usr/bin/wasp-app" "$@"' >> AppDir/AppRun
+          chmod +x AppDir/AppRun
+          
+          # AppImageTool
+          wget -q https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x appimagetool-x86_64.AppImage
+          
+          # Build AppImage
+          ARCH=x86_64 ./appimagetool-x86_64.AppImage AppDir "dist/WASP-${{ env.VERSION_TAG }}-linux.AppImage"
+
+      - name: Build with PyInstaller (macOS - App, Zip, DMG)
         if: runner.os == 'macOS'
+        env:
+          VERSION_TAG: ${{ needs.create_release.outputs.tag_name }}
         run: |
           pyinstaller --name WASP --onefile --windowed --add-data "core:core" --add-data "gui:gui" main.py
-          # Create DMG
+          
+          # 1. Zip the .app
+          cd dist
+          zip -r "WASP-${{ env.VERSION_TAG }}-macos.app.zip" WASP.app
+          cd ..
+          
+          # 2. Create DMG
           hdiutil create dist/WASP.dmg -srcfolder dist/WASP.app -ov -format UDZO
-          mv dist/WASP.dmg dist/WASP-macos.dmg
+          mv dist/WASP.dmg "dist/WASP-${{ env.VERSION_TAG }}-macos.dmg"
 
-      - name: Move to Output Folder (Simulating "Store at output")
+      - name: Move to Output Folder
         shell: bash
+        env:
+          VERSION_TAG: ${{ needs.create_release.outputs.tag_name }}
         run: |
           mkdir -p output
           if [ "${{ runner.os }}" == "Windows" ]; then
-            cp dist/WASP-windows.exe output/
+            cp "dist/WASP-${{ env.VERSION_TAG }}-windows.exe" output/
           elif [ "${{ runner.os }}" == "Linux" ]; then
-            cp dist/WASP-linux output/
+            cp "dist/WASP-${{ env.VERSION_TAG }}-linux.deb" output/
+            cp "dist/WASP-${{ env.VERSION_TAG }}-linux.AppImage" output/
           elif [ "${{ runner.os }}" == "macOS" ]; then
-            cp dist/WASP-macos.dmg output/
+            cp "dist/WASP-${{ env.VERSION_TAG }}-macos.dmg" output/
+            cp "dist/WASP-${{ env.VERSION_TAG }}-macos.app.zip" output/
           fi
 
-      - name: Upload Release Asset (Windows)
-        if: runner.os == 'Windows'
+      - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
+        if: "startsWith(github.ref, 'refs/tags/')"
         with:
-          tag_name: ${{ needs.create_release.outputs.tag_name }}
-          files: output/WASP-windows.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Release Asset (Linux)
-        if: runner.os == 'Linux'
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ needs.create_release.outputs.tag_name }}
-          files: output/WASP-linux
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Release Asset (macOS)
-        if: runner.os == 'macOS'
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ needs.create_release.outputs.tag_name }}
-          files: output/WASP-macos.dmg
+          files: output/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
